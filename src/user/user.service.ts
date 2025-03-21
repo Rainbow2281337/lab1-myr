@@ -15,7 +15,20 @@ export class UserService {
     return Buffer.from(password).toString('base64');
   }
 
-  createUser(userData: CreateUserDto) {
+  async checkIfUserExists(email: string) {
+    const user = await this.userModel.findOne({
+      email,
+    });
+
+    return !!user;
+  }
+
+  async createUser(userData: CreateUserDto) {
+    const checkIfUserExists = await this.checkIfUserExists(userData.email);
+
+    if (checkIfUserExists) {
+      throw new UnauthorizedException('User already exists');
+    }
     const data = {
       ...userData,
       id: uuid.v4(),

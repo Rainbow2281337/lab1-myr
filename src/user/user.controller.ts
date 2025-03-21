@@ -24,6 +24,11 @@ export class UserController {
     return this.userService.getUserData(id);
   }
 
+  @Get('exists/:email')
+  checkIfUserExists(@Param('email') email: string) {
+    return this.userService.checkIfUserExists(email);
+  }
+
   @Put(':id')
   updateUserData(@Param('id') id: string, @Body() userData: Partial<User>) {
     return this.userService.updateUserData(id, userData);
